@@ -18,38 +18,46 @@
 package org.apache.shardingsphere.elasticjob.lite.spring.namespace.job;
 
 import lombok.RequiredArgsConstructor;
-import org.apache.shardingsphere.elasticjob.infra.concurrent.BlockUtils;
 import org.apache.shardingsphere.elasticjob.lite.api.bootstrap.impl.OneOffJobBootstrap;
 import org.apache.shardingsphere.elasticjob.lite.internal.schedule.JobRegistry;
 import org.apache.shardingsphere.elasticjob.lite.spring.namespace.fixture.job.DataflowElasticJob;
 import org.apache.shardingsphere.elasticjob.lite.spring.namespace.fixture.job.FooSimpleElasticJob;
-import org.apache.shardingsphere.elasticjob.lite.spring.namespace.test.AbstractZookeeperJUnit4SpringContextTests;
+import org.apache.shardingsphere.elasticjob.lite.spring.namespace.test.AbstractZookeeperJUnitJupiterSpringContextTests;
 import org.apache.shardingsphere.elasticjob.reg.base.CoordinatorRegistryCenter;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.awaitility.Awaitility;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 
-import static org.junit.Assert.assertTrue;
+import java.util.concurrent.TimeUnit;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @RequiredArgsConstructor
-public abstract class AbstractOneOffJobSpringIntegrateTest extends AbstractZookeeperJUnit4SpringContextTests {
+public abstract class AbstractOneOffJobSpringIntegrateTest extends AbstractZookeeperJUnitJupiterSpringContextTests {
     
     private final String simpleJobName;
     
     private final String throughputDataflowJobName;
+
+    @Autowired
+    private ApplicationContext applicationContext;
     
     @Autowired
     private CoordinatorRegistryCenter regCenter;
     
-    @Before
-    @After
+    @BeforeEach
+    @AfterEach
     public void reset() {
         FooSimpleElasticJob.reset();
         DataflowElasticJob.reset();
     }
     
-    @After
+    @AfterEach
     public void tearDown() {
         JobRegistry.getInstance().shutdown(simpleJobName);
         JobRegistry.getInstance().shutdown(throughputDataflowJobName);
@@ -64,9 +72,9 @@ public abstract class AbstractOneOffJobSpringIntegrateTest extends AbstractZooke
     private void assertSimpleElasticJobBean() {
         OneOffJobBootstrap bootstrap = applicationContext.getBean(simpleJobName, OneOffJobBootstrap.class);
         bootstrap.execute();
-        while (!FooSimpleElasticJob.isCompleted()) {
-            BlockUtils.waitingShortTime();
-        }
+        Awaitility.await().atMost(5L, TimeUnit.MINUTES).untilAsserted(() ->
+                assertThat(FooSimpleElasticJob.isCompleted(), is(true))
+        );
         assertTrue(FooSimpleElasticJob.isCompleted());
         assertTrue(regCenter.isExisted("/" + simpleJobName + "/sharding"));
     }
@@ -74,9 +82,9 @@ public abstract class AbstractOneOffJobSpringIntegrateTest extends AbstractZooke
     private void assertThroughputDataflowElasticJobBean() {
         OneOffJobBootstrap bootstrap = applicationContext.getBean(throughputDataflowJobName, OneOffJobBootstrap.class);
         bootstrap.execute();
-        while (!DataflowElasticJob.isCompleted()) {
-            BlockUtils.waitingShortTime();
-        }
+        Awaitility.await().atMost(5L, TimeUnit.MINUTES).untilAsserted(() ->
+                assertThat(DataflowElasticJob.isCompleted(), is(true))
+        );
         assertTrue(DataflowElasticJob.isCompleted());
         assertTrue(regCenter.isExisted("/" + throughputDataflowJobName + "/sharding"));
     }

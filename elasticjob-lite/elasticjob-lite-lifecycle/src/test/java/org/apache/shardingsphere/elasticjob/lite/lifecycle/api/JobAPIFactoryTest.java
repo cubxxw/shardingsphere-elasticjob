@@ -18,10 +18,10 @@
 package org.apache.shardingsphere.elasticjob.lite.lifecycle.api;
 
 import org.apache.shardingsphere.elasticjob.lite.lifecycle.AbstractEmbedZookeeperBaseTest;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public final class JobAPIFactoryTest extends AbstractEmbedZookeeperBaseTest {
     

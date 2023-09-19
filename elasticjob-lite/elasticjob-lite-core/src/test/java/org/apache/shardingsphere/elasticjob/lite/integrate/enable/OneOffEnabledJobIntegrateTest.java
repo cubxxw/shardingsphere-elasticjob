@@ -19,10 +19,14 @@ package org.apache.shardingsphere.elasticjob.lite.integrate.enable;
 
 import org.apache.shardingsphere.elasticjob.api.JobConfiguration;
 import org.apache.shardingsphere.elasticjob.lite.fixture.job.DetailedFooJob;
-import org.apache.shardingsphere.elasticjob.infra.concurrent.BlockUtils;
-import org.junit.Test;
+import org.awaitility.Awaitility;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertTrue;
+import java.util.concurrent.TimeUnit;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public final class OneOffEnabledJobIntegrateTest extends EnabledJobIntegrateTest {
     
@@ -38,9 +42,9 @@ public final class OneOffEnabledJobIntegrateTest extends EnabledJobIntegrateTest
     
     @Test
     public void assertJobInit() {
-        while (!((DetailedFooJob) getElasticJob()).isCompleted()) {
-            BlockUtils.waitingShortTime();
-        }
+        Awaitility.await().atMost(1L, TimeUnit.MINUTES).untilAsserted(() ->
+                assertThat(((DetailedFooJob) getElasticJob()).isCompleted(), is(true))
+        );
         assertTrue(getREGISTRY_CENTER().isExisted("/" + getJobName() + "/sharding"));
     }
 }

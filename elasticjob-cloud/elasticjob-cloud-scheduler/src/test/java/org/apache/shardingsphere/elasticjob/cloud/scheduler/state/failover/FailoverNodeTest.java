@@ -19,10 +19,10 @@ package org.apache.shardingsphere.elasticjob.cloud.scheduler.state.failover;
 
 import org.apache.shardingsphere.elasticjob.infra.context.ExecutionType;
 import org.apache.shardingsphere.elasticjob.cloud.scheduler.fixture.TaskNode;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public final class FailoverNodeTest {
     

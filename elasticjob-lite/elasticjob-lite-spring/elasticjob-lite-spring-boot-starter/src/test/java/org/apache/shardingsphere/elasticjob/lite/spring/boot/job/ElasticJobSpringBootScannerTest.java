@@ -17,26 +17,34 @@
 
 package org.apache.shardingsphere.elasticjob.lite.spring.boot.job;
 
-import org.apache.shardingsphere.elasticjob.infra.concurrent.BlockUtils;
 import org.apache.shardingsphere.elasticjob.lite.api.bootstrap.impl.ScheduleJobBootstrap;
 import org.apache.shardingsphere.elasticjob.lite.spring.boot.job.fixture.EmbedTestingServer;
 import org.apache.shardingsphere.elasticjob.lite.spring.boot.job.fixture.job.impl.AnnotationCustomJob;
 import org.apache.shardingsphere.elasticjob.lite.spring.core.scanner.ElasticJobScan;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.awaitility.Awaitility;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import java.util.concurrent.TimeUnit;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
 @ActiveProfiles("elasticjob")
 @ElasticJobScan(basePackages = "org.apache.shardingsphere.elasticjob.lite.spring.boot.job.fixture.job.impl")
-public class ElasticJobSpringBootScannerTest extends AbstractJUnit4SpringContextTests {
-    
-    @BeforeClass
+public class ElasticJobSpringBootScannerTest {
+
+    @Autowired
+    private ApplicationContext applicationContext;
+
+    @BeforeAll
     public static void init() {
         EmbedTestingServer.start();
         AnnotationCustomJob.reset();
@@ -44,9 +52,9 @@ public class ElasticJobSpringBootScannerTest extends AbstractJUnit4SpringContext
     
     @Test
     public void assertDefaultBeanNameWithTypeJob() {
-        while (!AnnotationCustomJob.isCompleted()) {
-            BlockUtils.waitingShortTime();
-        }
+        Awaitility.await().atMost(1L, TimeUnit.MINUTES).untilAsserted(() ->
+                assertThat(AnnotationCustomJob.isCompleted(), is(true))
+        );
         assertTrue(AnnotationCustomJob.isCompleted());
         assertNotNull(applicationContext);
         assertNotNull(applicationContext.getBean("annotationCustomJobSchedule", ScheduleJobBootstrap.class));

@@ -20,13 +20,13 @@ package org.apache.shardingsphere.elasticjob.reg.zookeeper;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.recipes.cache.CuratorCache;
 import org.apache.shardingsphere.elasticjob.reg.zookeeper.fixture.EmbedTestingServer;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public final class ZookeeperRegistryCenterMiscellaneousTest {
     
@@ -35,7 +35,7 @@ public final class ZookeeperRegistryCenterMiscellaneousTest {
     
     private static ZookeeperRegistryCenter zkRegCenter;
     
-    @BeforeClass
+    @BeforeAll
     public static void setUp() {
         EmbedTestingServer.start();
         ZOOKEEPER_CONFIGURATION.setConnectionTimeoutMilliseconds(30000);
@@ -44,7 +44,7 @@ public final class ZookeeperRegistryCenterMiscellaneousTest {
         zkRegCenter.addCacheData("/test");
     }
     
-    @AfterClass
+    @AfterAll
     public static void tearDown() {
         zkRegCenter.close();
     }

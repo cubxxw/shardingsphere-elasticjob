@@ -18,13 +18,13 @@
 package org.apache.shardingsphere.elasticjob.infra.listener;
 
 import org.apache.shardingsphere.elasticjob.api.ShardingContext;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public final class ShardingContextsTest {
     

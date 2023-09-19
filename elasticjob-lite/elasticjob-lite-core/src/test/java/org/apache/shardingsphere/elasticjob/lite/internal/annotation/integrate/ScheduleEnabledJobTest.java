@@ -17,21 +17,23 @@
 
 package org.apache.shardingsphere.elasticjob.lite.internal.annotation.integrate;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
-
 import org.apache.shardingsphere.elasticjob.api.JobConfiguration;
-import org.apache.shardingsphere.elasticjob.infra.concurrent.BlockUtils;
 import org.apache.shardingsphere.elasticjob.infra.env.IpUtils;
 import org.apache.shardingsphere.elasticjob.infra.pojo.JobConfigurationPOJO;
 import org.apache.shardingsphere.elasticjob.infra.yaml.YamlEngine;
 import org.apache.shardingsphere.elasticjob.lite.fixture.job.AnnotationSimpleJob;
 import org.apache.shardingsphere.elasticjob.lite.internal.schedule.JobRegistry;
 import org.apache.shardingsphere.elasticjob.lite.internal.server.ServerStatus;
-import org.junit.Before;
-import org.junit.Test;
+import org.awaitility.Awaitility;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.util.concurrent.TimeUnit;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public final class ScheduleEnabledJobTest extends BaseAnnotationTest {
     
@@ -39,7 +41,7 @@ public final class ScheduleEnabledJobTest extends BaseAnnotationTest {
         super(TestType.SCHEDULE, new AnnotationSimpleJob());
     }
     
-    @Before
+    @BeforeEach
     public void assertEnabledRegCenterInfo() {
         assertThat(JobRegistry.getInstance().getCurrentShardingTotalCount(getJobName()), is(3));
         assertThat(JobRegistry.getInstance().getJobInstance(getJobName()).getServerIp(), is(IpUtils.getIp()));
@@ -57,9 +59,9 @@ public final class ScheduleEnabledJobTest extends BaseAnnotationTest {
     
     @Test
     public void assertJobInit() {
-        while (!((AnnotationSimpleJob) getElasticJob()).isCompleted()) {
-            BlockUtils.waitingShortTime();
-        }
+        Awaitility.await().atMost(1L, TimeUnit.MINUTES).untilAsserted(() ->
+                assertThat(((AnnotationSimpleJob) getElasticJob()).isCompleted(), is(true))
+        );
         assertTrue(getREGISTRY_CENTER().isExisted("/" + getJobName() + "/sharding"));
     }
     

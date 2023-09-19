@@ -18,13 +18,13 @@
 package org.apache.shardingsphere.elasticjob.cloud.scheduler.statistics.util;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.apache.shardingsphere.elasticjob.cloud.statistics.StatisticInterval;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class StatisticTimeUtilsTest {
     

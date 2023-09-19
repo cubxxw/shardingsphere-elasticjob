@@ -17,13 +17,13 @@
 
 package org.apache.shardingsphere.elasticjob.lite.internal.util;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public final class SensitiveInfoUtilsTest {
     

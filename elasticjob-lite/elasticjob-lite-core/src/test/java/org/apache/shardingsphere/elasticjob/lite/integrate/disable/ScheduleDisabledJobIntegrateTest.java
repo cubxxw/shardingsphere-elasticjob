@@ -21,10 +21,14 @@ import org.apache.shardingsphere.elasticjob.api.JobConfiguration;
 import org.apache.shardingsphere.elasticjob.lite.fixture.job.DetailedFooJob;
 import org.apache.shardingsphere.elasticjob.lite.internal.schedule.JobRegistry;
 import org.apache.shardingsphere.elasticjob.lite.internal.server.ServerStatus;
-import org.apache.shardingsphere.elasticjob.infra.concurrent.BlockUtils;
-import org.junit.Test;
+import org.awaitility.Awaitility;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertTrue;
+import java.util.concurrent.TimeUnit;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public final class ScheduleDisabledJobIntegrateTest extends DisabledJobIntegrateTest {
     
@@ -40,12 +44,11 @@ public final class ScheduleDisabledJobIntegrateTest extends DisabledJobIntegrate
     
     @Test
     public void assertJobRunning() {
-        BlockUtils.waitingShortTime();
         assertDisabledRegCenterInfo();
         setJobEnable();
-        while (!((DetailedFooJob) getElasticJob()).isCompleted()) {
-            BlockUtils.waitingShortTime();
-        }
+        Awaitility.await().atMost(10L, TimeUnit.SECONDS).untilAsserted(() ->
+                assertThat(((DetailedFooJob) getElasticJob()).isCompleted(), is(true))
+        );
         assertEnabledRegCenterInfo();
     }
     

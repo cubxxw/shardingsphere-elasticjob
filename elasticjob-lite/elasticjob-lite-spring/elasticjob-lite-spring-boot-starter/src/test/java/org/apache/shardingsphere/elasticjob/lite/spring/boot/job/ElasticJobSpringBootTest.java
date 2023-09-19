@@ -19,7 +19,6 @@ package org.apache.shardingsphere.elasticjob.lite.spring.boot.job;
 
 import org.apache.shardingsphere.elasticjob.api.ElasticJob;
 import org.apache.shardingsphere.elasticjob.api.JobExtraConfiguration;
-import org.apache.shardingsphere.elasticjob.infra.concurrent.BlockUtils;
 import org.apache.shardingsphere.elasticjob.lite.api.bootstrap.JobBootstrap;
 import org.apache.shardingsphere.elasticjob.lite.api.bootstrap.impl.OneOffJobBootstrap;
 import org.apache.shardingsphere.elasticjob.lite.api.bootstrap.impl.ScheduleJobBootstrap;
@@ -30,12 +29,14 @@ import org.apache.shardingsphere.elasticjob.lite.spring.boot.reg.ZookeeperProper
 import org.apache.shardingsphere.elasticjob.lite.spring.boot.tracing.TracingProperties;
 import org.apache.shardingsphere.elasticjob.reg.zookeeper.ZookeeperRegistryCenter;
 import org.apache.shardingsphere.elasticjob.tracing.api.TracingConfiguration;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.awaitility.Awaitility;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 
 import javax.sql.DataSource;
 import java.lang.reflect.Field;
@@ -45,21 +46,25 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
 @SpringBootApplication
 @ActiveProfiles("elasticjob")
-public class ElasticJobSpringBootTest extends AbstractJUnit4SpringContextTests {
-    
-    @BeforeClass
+public class ElasticJobSpringBootTest {
+
+    @Autowired
+    private ApplicationContext applicationContext;
+
+    @BeforeAll
     public static void init() {
         EmbedTestingServer.start();
     }
@@ -131,12 +136,13 @@ public class ElasticJobSpringBootTest extends AbstractJUnit4SpringContextTests {
     
     @Test
     public void assertJobScheduleCreation() {
-        assertNotNull(applicationContext);
-        Map<String, ElasticJob> elasticJobBeans = applicationContext.getBeansOfType(ElasticJob.class);
-        assertFalse(elasticJobBeans.isEmpty());
-        Map<String, JobBootstrap> jobBootstrapBeans = applicationContext.getBeansOfType(JobBootstrap.class);
-        assertFalse(jobBootstrapBeans.isEmpty());
-        BlockUtils.waitingShortTime();
+        Awaitility.await().atLeast(100L, TimeUnit.MILLISECONDS).atMost(1L, TimeUnit.MINUTES).untilAsserted(() -> {
+            assertNotNull(applicationContext);
+            Map<String, ElasticJob> elasticJobBeans = applicationContext.getBeansOfType(ElasticJob.class);
+            assertFalse(elasticJobBeans.isEmpty());
+            Map<String, JobBootstrap> jobBootstrapBeans = applicationContext.getBeansOfType(JobBootstrap.class);
+            assertFalse(jobBootstrapBeans.isEmpty());
+        });
     }
     
     @Test
