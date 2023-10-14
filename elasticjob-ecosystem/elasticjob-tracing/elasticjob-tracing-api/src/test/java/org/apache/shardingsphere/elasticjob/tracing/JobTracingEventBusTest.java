@@ -7,7 +7,7 @@
  * the License.  You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *  
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -38,7 +38,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-public final class JobTracingEventBusTest {
+class JobTracingEventBusTest {
     
     @Mock
     private JobEventCaller jobEventCaller;
@@ -49,13 +49,13 @@ public final class JobTracingEventBusTest {
     private JobTracingEventBus jobTracingEventBus;
     
     @Test
-    public void assertRegisterFailure() {
+    void assertRegisterFailure() {
         jobTracingEventBus = new JobTracingEventBus(new TracingConfiguration<>("FAIL", null));
         assertIsRegistered(false);
     }
     
     @Test
-    public void assertPost() throws InterruptedException {
+    void assertPost() throws InterruptedException {
         jobTracingEventBus = new JobTracingEventBus(new TracingConfiguration<>("TEST", jobEventCaller));
         assertIsRegistered(true);
         jobTracingEventBus.post(new JobExecutionEvent("localhost", "127.0.0.1", "fake_task_id", "test_event_bus_job", JobExecutionEvent.ExecutionSource.NORMAL_TRIGGER, 0));
@@ -66,7 +66,7 @@ public final class JobTracingEventBusTest {
     }
     
     @Test
-    public void assertPostWithoutListener() throws ReflectiveOperationException {
+    void assertPostWithoutListener() throws ReflectiveOperationException {
         jobTracingEventBus = new JobTracingEventBus();
         assertIsRegistered(false);
         Field field = JobTracingEventBus.class.getDeclaredField("eventBus");

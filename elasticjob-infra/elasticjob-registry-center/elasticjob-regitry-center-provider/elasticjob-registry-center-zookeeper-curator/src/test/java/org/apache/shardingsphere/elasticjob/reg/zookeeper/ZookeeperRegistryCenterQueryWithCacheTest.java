@@ -7,7 +7,7 @@
  * the License.  You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *  
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -27,15 +27,15 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-public final class ZookeeperRegistryCenterQueryWithCacheTest {
+class ZookeeperRegistryCenterQueryWithCacheTest {
     
-    private static final ZookeeperConfiguration ZOOKEEPER_CONFIGURATION = 
+    private static final ZookeeperConfiguration ZOOKEEPER_CONFIGURATION =
             new ZookeeperConfiguration(EmbedTestingServer.getConnectionString(), ZookeeperRegistryCenterQueryWithCacheTest.class.getName());
     
     private static ZookeeperRegistryCenter zkRegCenter;
     
     @BeforeAll
-    public static void setUp() {
+    static void setUp() {
         EmbedTestingServer.start();
         zkRegCenter = new ZookeeperRegistryCenter(ZOOKEEPER_CONFIGURATION);
         ZOOKEEPER_CONFIGURATION.setConnectionTimeoutMilliseconds(30000);
@@ -45,17 +45,17 @@ public final class ZookeeperRegistryCenterQueryWithCacheTest {
     }
     
     @AfterAll
-    public static void tearDown() {
+    static void tearDown() {
         zkRegCenter.close();
     }
     
     @Test
-    public void assertGetWithoutValue() {
+    void assertGetWithoutValue() {
         assertNull(zkRegCenter.get("/test/null"));
     }
     
     @Test
-    public void assertGetFromCache() {
+    void assertGetFromCache() {
         assertThat(zkRegCenter.get("/test"), is("test"));
         assertThat(zkRegCenter.get("/test/deep/nested"), is("deepNested"));
     }

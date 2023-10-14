@@ -7,7 +7,7 @@
  * the License.  You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *  
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -37,16 +37,16 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public final class IpUtilsTest {
+class IpUtilsTest {
     
     @Test
-    public void assertGetIp() {
+    void assertGetIp() {
         assertNotNull(IpUtils.getIp());
     }
     
     @Test
     @SneakyThrows
-    public void assertPreferredNetworkInterface() {
+    void assertPreferredNetworkInterface() {
         System.setProperty(IpUtils.PREFERRED_NETWORK_INTERFACE, "eth0");
         Method declaredMethod = IpUtils.class.getDeclaredMethod("isPreferredNetworkInterface", NetworkInterface.class);
         declaredMethod.setAccessible(true);
@@ -59,7 +59,7 @@ public final class IpUtilsTest {
     
     @Test
     @SneakyThrows
-    public void assertPreferredNetworkAddress() {
+    void assertPreferredNetworkAddress() {
         Method declaredMethod = IpUtils.class.getDeclaredMethod("isPreferredAddress", InetAddress.class);
         declaredMethod.setAccessible(true);
         InetAddress inetAddress = mock(InetAddress.class);
@@ -79,7 +79,7 @@ public final class IpUtilsTest {
     
     @Test
     @SneakyThrows
-    public void assertGetFirstNetworkInterface() {
+    void assertGetFirstNetworkInterface() {
         InetAddress address1 = mock(Inet4Address.class);
         when(address1.isLoopbackAddress()).thenReturn(false);
         when(address1.isAnyLocalAddress()).thenReturn(false);
@@ -114,7 +114,7 @@ public final class IpUtilsTest {
     
     @Test
     @SneakyThrows
-    public void assertGetHostName() {
+    void assertGetHostName() {
         assertNotNull(IpUtils.getHostName());
         Field field = IpUtils.class.getDeclaredField("cachedHostName");
         field.setAccessible(true);

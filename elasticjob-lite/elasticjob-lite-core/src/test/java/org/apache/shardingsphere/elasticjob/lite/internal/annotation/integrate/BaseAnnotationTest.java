@@ -45,7 +45,7 @@ public abstract class BaseAnnotationTest {
     private static final CoordinatorRegistryCenter REGISTRY_CENTER = new ZookeeperRegistryCenter(ZOOKEEPER_CONFIG);
     
     private final ElasticJob elasticJob;
-            
+    
     private final JobConfiguration jobConfiguration;
     
     private final JobBootstrap jobBootstrap;
@@ -74,14 +74,14 @@ public abstract class BaseAnnotationTest {
     }
     
     @BeforeAll
-    public static void init() {
+    static void init() {
         EmbedTestingServer.start();
         ZOOKEEPER_CONFIG.setConnectionTimeoutMilliseconds(30000);
         REGISTRY_CENTER.init();
     }
     
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         if (jobBootstrap instanceof ScheduleJobBootstrap) {
             ((ScheduleJobBootstrap) jobBootstrap).schedule();
         } else {
@@ -90,7 +90,7 @@ public abstract class BaseAnnotationTest {
     }
     
     @AfterEach
-    public void tearDown() {
+    void tearDown() {
         jobBootstrap.shutdown();
         ReflectionUtils.setFieldValue(JobRegistry.getInstance(), "instance", null);
     }

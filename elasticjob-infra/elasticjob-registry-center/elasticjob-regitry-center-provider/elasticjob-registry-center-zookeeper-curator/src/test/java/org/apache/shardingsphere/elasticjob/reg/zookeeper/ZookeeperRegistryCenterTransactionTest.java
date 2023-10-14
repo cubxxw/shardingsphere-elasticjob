@@ -32,28 +32,28 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
-public final class ZookeeperRegistryCenterTransactionTest {
-
+class ZookeeperRegistryCenterTransactionTest {
+    
     private static final ZookeeperConfiguration ZOOKEEPER_CONFIGURATION =
             new ZookeeperConfiguration(EmbedTestingServer.getConnectionString(), ZookeeperRegistryCenterTransactionTest.class.getName());
-
+    
     private static ZookeeperRegistryCenter zkRegCenter;
-
+    
     @BeforeAll
-    public static void setUp() {
+    static void setUp() {
         EmbedTestingServer.start();
         zkRegCenter = new ZookeeperRegistryCenter(ZOOKEEPER_CONFIGURATION);
         ZOOKEEPER_CONFIGURATION.setConnectionTimeoutMilliseconds(30000);
         zkRegCenter.init();
     }
-
+    
     @BeforeEach
-    public void setup() {
+    void setup() {
         ZookeeperRegistryCenterTestUtil.persist(zkRegCenter);
     }
-
+    
     @Test
-    public void assertExecuteInTransactionSucceeded() throws Exception {
+    void assertExecuteInTransactionSucceeded() throws Exception {
         List<TransactionOperation> operations = new ArrayList<>(3);
         operations.add(TransactionOperation.opCheckExists("/test"));
         operations.add(TransactionOperation.opCheckExists("/test/child"));
@@ -62,9 +62,9 @@ public final class ZookeeperRegistryCenterTransactionTest {
         zkRegCenter.executeInTransaction(operations);
         assertThat(zkRegCenter.getDirectly("/test/transaction"), is("transaction"));
     }
-
+    
     @Test
-    public void assertExecuteInTransactionFailed() throws Exception {
+    void assertExecuteInTransactionFailed() throws Exception {
         List<TransactionOperation> operations = new ArrayList<>(3);
         operations.add(TransactionOperation.opAdd("/test/shouldnotexists", ""));
         operations.add(TransactionOperation.opCheckExists("/test/notexists"));

@@ -7,7 +7,7 @@
  * the License.  You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *  
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -28,25 +28,25 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public final class ShardingItemParametersTest {
+class ShardingItemParametersTest {
     
     @Test
-    public void assertNewWhenPairFormatInvalid() {
+    void assertNewWhenPairFormatInvalid() {
         assertThrows(JobConfigurationException.class, () -> new ShardingItemParameters("xxx-xxx"));
     }
     
     @Test
-    public void assertNewWhenItemIsNotNumber() {
+    void assertNewWhenItemIsNotNumber() {
         assertThrows(JobConfigurationException.class, () -> new ShardingItemParameters("xxx=xxx"));
     }
     
     @Test
-    public void assertGetMapWhenIsEmpty() {
+    void assertGetMapWhenIsEmpty() {
         assertThat(new ShardingItemParameters("").getMap(), is(Collections.EMPTY_MAP));
     }
     
     @Test
-    public void assertGetMap() {
+    void assertGetMap() {
         Map<Integer, String> expected = new HashMap<>(3);
         expected.put(0, "A");
         expected.put(1, "B");

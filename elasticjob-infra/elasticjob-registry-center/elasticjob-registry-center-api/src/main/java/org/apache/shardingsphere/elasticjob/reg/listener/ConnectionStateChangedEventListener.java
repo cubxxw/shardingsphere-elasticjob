@@ -27,10 +27,10 @@ public interface ConnectionStateChangedEventListener {
     enum State {
         
         CONNECTED,
-    
+        
         RECONNECTED,
-    
-        UNAVAILABLE,
+        
+        UNAVAILABLE
     }
     
     /**

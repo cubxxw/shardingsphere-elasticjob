@@ -7,7 +7,7 @@
  * the License.  You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *  
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -28,12 +28,12 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public final class ElasticJobExecutorServiceTest {
+class ElasticJobExecutorServiceTest {
     
     private static boolean hasExecuted;
-
+    
     @Test
-    public void assertCreateExecutorService() {
+    void assertCreateExecutorService() {
         ElasticJobExecutorService executorServiceObject = new ElasticJobExecutorService("executor-service-test", 1);
         assertThat(executorServiceObject.getActiveThreadCount(), is(0));
         assertThat(executorServiceObject.getWorkQueueSize(), is(0));
@@ -58,7 +58,7 @@ public final class ElasticJobExecutorServiceTest {
     }
     
     static class FooTask implements Runnable {
-
+        
         @Override
         public void run() {
             Awaitility.await().atMost(1L, TimeUnit.MINUTES)

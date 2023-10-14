@@ -7,7 +7,7 @@
  * the License.  You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *  
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -25,10 +25,10 @@ import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public final class RDBTracingListenerConfigurationTest {
+class RDBTracingListenerConfigurationTest {
     
     @Test
-    public void assertCreateTracingListenerSuccess() throws TracingConfigurationException {
+    void assertCreateTracingListenerSuccess() throws TracingConfigurationException {
         BasicDataSource dataSource = new BasicDataSource();
         dataSource.setDriverClassName(org.h2.Driver.class.getName());
         dataSource.setUrl("jdbc:h2:mem:job_event_storage");
@@ -38,8 +38,7 @@ public final class RDBTracingListenerConfigurationTest {
     }
     
     @Test
-    public void assertCreateTracingListenerFailure() {
-        assertThrows(TracingConfigurationException.class, () ->
-                new RDBTracingListenerConfiguration().createTracingListener(new BasicDataSource()));
+    void assertCreateTracingListenerFailure() {
+        assertThrows(TracingConfigurationException.class, () -> new RDBTracingListenerConfiguration().createTracingListener(new BasicDataSource()));
     }
 }

@@ -7,7 +7,7 @@
  * the License.  You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *  
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -28,21 +28,20 @@ import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public final class JobErrorHandlerFactoryTest {
+class JobErrorHandlerFactoryTest {
     
     @Test
-    public void assertGetDefaultHandler() {
+    void assertGetDefaultHandler() {
         assertThat(JobErrorHandlerFactory.createHandler("", new Properties()).orElse(null), instanceOf(LogJobErrorHandler.class));
     }
     
     @Test
-    public void assertGetInvalidHandler() {
-        assertThrows(JobConfigurationException.class, () ->
-                JobErrorHandlerFactory.createHandler("INVALID", new Properties()).orElseThrow(() -> new JobConfigurationException("")));
+    void assertGetInvalidHandler() {
+        assertThrows(JobConfigurationException.class, () -> JobErrorHandlerFactory.createHandler("INVALID", new Properties()).orElseThrow(() -> new JobConfigurationException("")));
     }
     
     @Test
-    public void assertGetHandler() {
+    void assertGetHandler() {
         assertThat(JobErrorHandlerFactory.createHandler("THROW", new Properties()).orElse(null), instanceOf(ThrowJobErrorHandler.class));
     }
 }

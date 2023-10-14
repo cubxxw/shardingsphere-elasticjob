@@ -7,7 +7,7 @@
  * the License.  You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *  
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -44,7 +44,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-public final class TaskExecutorTest {
+class TaskExecutorTest {
     
     @Mock
     private ExecutorDriver executorDriver;
@@ -61,7 +61,7 @@ public final class TaskExecutorTest {
     private TaskExecutor taskExecutor;
     
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         taskExecutor = new TaskExecutor(new TestSimpleJob());
         setExecutorService();
         executorInfo = ExecutorInfo.getDefaultInstance();
@@ -75,14 +75,14 @@ public final class TaskExecutorTest {
     }
     
     @Test
-    public void assertKillTask() {
+    void assertKillTask() {
         TaskID taskID = Protos.TaskID.newBuilder().setValue("task_id").build();
         taskExecutor.killTask(executorDriver, taskID);
         verify(executorDriver).sendStatusUpdate(Protos.TaskStatus.newBuilder().setTaskId(taskID).setState(Protos.TaskState.TASK_KILLED).build());
     }
     
     @Test
-    public void assertRegisteredWithoutData() {
+    void assertRegisteredWithoutData() {
         // CHECKSTYLE:OFF
         HashMap<String, String> data = new HashMap<>(4, 1);
         // CHECKSTYLE:ON
@@ -96,44 +96,44 @@ public final class TaskExecutorTest {
     }
     
     @Test
-    public void assertRegisteredWithData() {
+    void assertRegisteredWithData() {
         taskExecutor.registered(executorDriver, executorInfo, frameworkInfo, slaveInfo);
     }
     
     @Test
-    public void assertLaunchTask() {
+    void assertLaunchTask() {
         taskExecutor.launchTask(executorDriver, TaskInfo.newBuilder().setName("test_job")
                 .setTaskId(TaskID.newBuilder().setValue("fake_task_id")).setSlaveId(Protos.SlaveID.newBuilder().setValue("slave-S0")).build());
     }
     
     @Test
-    public void assertReregistered() {
+    void assertReregistered() {
         taskExecutor.reregistered(executorDriver, slaveInfo);
     }
     
     @Test
-    public void assertDisconnected() {
+    void assertDisconnected() {
         taskExecutor.disconnected(executorDriver);
     }
     
     @Test
-    public void assertFrameworkMessage() {
+    void assertFrameworkMessage() {
         taskExecutor.frameworkMessage(executorDriver, null);
     }
     
     @Test
-    public void assertShutdown() {
+    void assertShutdown() {
         taskExecutor.shutdown(executorDriver);
     }
     
     @Test
-    public void assertError() {
+    void assertError() {
         taskExecutor.error(executorDriver, "");
     }
     
     @Test
     @SneakyThrows
-    public void assertConstructor() {
+    void assertConstructor() {
         TestSimpleJob testSimpleJob = new TestSimpleJob();
         taskExecutor = new TaskExecutor(testSimpleJob);
         Field fieldElasticJob = TaskExecutor.class.getDeclaredField("elasticJob");

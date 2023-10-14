@@ -7,7 +7,7 @@
  * the License.  You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *  
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -29,12 +29,12 @@ import java.util.Map;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-public final class RotateServerByNameJobShardingStrategyTest {
+class RotateServerByNameJobShardingStrategyTest {
     
     private final RoundRobinByNameJobShardingStrategy rotateServerByNameJobShardingStrategy = new RoundRobinByNameJobShardingStrategy();
     
     @Test
-    public void assertSharding1() {
+    void assertSharding1() {
         Map<JobInstance, List<Integer>> expected = new HashMap<>();
         expected.put(new JobInstance("host1@-@0"), Collections.singletonList(0));
         expected.put(new JobInstance("host2@-@0"), Collections.singletonList(1));
@@ -43,7 +43,7 @@ public final class RotateServerByNameJobShardingStrategyTest {
     }
     
     @Test
-    public void assertSharding2() {
+    void assertSharding2() {
         Map<JobInstance, List<Integer>> expected = new HashMap<>();
         expected.put(new JobInstance("host2@-@0"), Collections.singletonList(0));
         expected.put(new JobInstance("host0@-@0"), Collections.singletonList(1));
@@ -52,7 +52,7 @@ public final class RotateServerByNameJobShardingStrategyTest {
     }
     
     @Test
-    public void assertSharding3() {
+    void assertSharding3() {
         Map<JobInstance, List<Integer>> expected = new HashMap<>();
         expected.put(new JobInstance("host0@-@0"), Collections.singletonList(0));
         expected.put(new JobInstance("host1@-@0"), Collections.singletonList(1));

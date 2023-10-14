@@ -35,7 +35,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ContextConfiguration(locations = "classpath:META-INF/job/withJobRef.xml")
-public final class JobSpringNamespaceWithRefTest extends AbstractZookeeperJUnitJupiterSpringContextTests {
+class JobSpringNamespaceWithRefTest extends AbstractZookeeperJUnitJupiterSpringContextTests {
     
     private final String simpleJobName = "simpleElasticJob_job_ref";
     
@@ -44,24 +44,22 @@ public final class JobSpringNamespaceWithRefTest extends AbstractZookeeperJUnitJ
     
     @BeforeEach
     @AfterEach
-    public void reset() {
+    void reset() {
         RefFooSimpleElasticJob.reset();
     }
     
     @AfterEach
-    public void tearDown() {
+    void tearDown() {
         JobRegistry.getInstance().shutdown(simpleJobName);
     }
     
     @Test
-    public void assertSpringJobBean() {
+    void assertSpringJobBean() {
         assertSimpleElasticJobBean();
     }
-
+    
     private void assertSimpleElasticJobBean() {
-        Awaitility.await().atMost(1L, TimeUnit.MINUTES).untilAsserted(() ->
-                assertThat(RefFooSimpleElasticJob.isCompleted(), is(true))
-        );
+        Awaitility.await().atMost(1L, TimeUnit.MINUTES).untilAsserted(() -> assertThat(RefFooSimpleElasticJob.isCompleted(), is(true)));
         assertTrue(RefFooSimpleElasticJob.isCompleted());
         assertTrue(regCenter.isExisted("/" + simpleJobName + "/sharding"));
     }

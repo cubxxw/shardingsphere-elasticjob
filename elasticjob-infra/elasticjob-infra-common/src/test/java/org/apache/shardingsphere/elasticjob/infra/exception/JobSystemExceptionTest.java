@@ -7,7 +7,7 @@
  * the License.  You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *  
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -23,22 +23,22 @@ import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-public final class JobSystemExceptionTest {
+class JobSystemExceptionTest {
     
     @Test
-    public void assertGetMessage() {
+    void assertGetMessage() {
         assertThat(new JobSystemException("message is: '%s'", "test").getMessage(), is("message is: 'test'"));
     }
     
     @Test
-    public void assertGetMessageCause() {
+    void assertGetMessageCause() {
         JobSystemException jobSystemException = new JobSystemException("message is: ", new RuntimeException());
         assertThat(jobSystemException.getMessage(), is("message is: "));
         assertThat(jobSystemException.getCause(), instanceOf(RuntimeException.class));
     }
     
     @Test
-    public void assertGetCause() {
+    void assertGetCause() {
         assertThat(new JobSystemException(new RuntimeException()).getCause(), instanceOf(RuntimeException.class));
     }
 }

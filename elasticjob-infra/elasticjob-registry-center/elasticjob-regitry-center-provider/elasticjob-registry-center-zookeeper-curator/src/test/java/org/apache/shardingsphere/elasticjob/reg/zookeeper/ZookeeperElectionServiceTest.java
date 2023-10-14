@@ -7,7 +7,7 @@
  * the License.  You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *  
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -40,7 +40,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-public class ZookeeperElectionServiceTest {
+class ZookeeperElectionServiceTest {
     
     private static final String HOST_AND_PORT = "localhost:8899";
     
@@ -50,12 +50,12 @@ public class ZookeeperElectionServiceTest {
     private ElectionCandidate electionCandidate;
     
     @BeforeAll
-    public static void init() {
+    static void init() {
         EmbedTestingServer.start();
     }
     
     @Test
-    public void assertContend() throws Exception {
+    void assertContend() throws Exception {
         CuratorFramework client = CuratorFrameworkFactory.newClient(EmbedTestingServer.getConnectionString(), new RetryOneTime(2000));
         client.start();
         client.blockUntilConnected();
@@ -83,12 +83,12 @@ public class ZookeeperElectionServiceTest {
             Thread.sleep(100);
         }
     }
-
+    
     @SneakyThrows
     private boolean hasLeadership(final ZookeeperElectionService zookeeperElectionService) {
         return ((LeaderSelector) getFieldValue(zookeeperElectionService, "leaderSelector")).hasLeadership();
     }
-
+    
     @SneakyThrows
     private Object getFieldValue(final Object target, final String fieldName) {
         Field field = target.getClass().getDeclaredField(fieldName);

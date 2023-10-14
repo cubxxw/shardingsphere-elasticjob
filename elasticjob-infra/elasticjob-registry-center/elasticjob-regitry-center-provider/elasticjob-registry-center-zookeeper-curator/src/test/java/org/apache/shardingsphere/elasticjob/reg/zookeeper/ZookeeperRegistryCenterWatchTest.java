@@ -35,29 +35,29 @@ import java.util.concurrent.TimeUnit;
 import static org.hamcrest.CoreMatchers.startsWith;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-public final class ZookeeperRegistryCenterWatchTest {
-
+class ZookeeperRegistryCenterWatchTest {
+    
     private static final ZookeeperConfiguration ZOOKEEPER_CONFIGURATION = new ZookeeperConfiguration(EmbedTestingServer.getConnectionString(), ZookeeperRegistryCenterWatchTest.class.getName());
-
+    
     private static ZookeeperRegistryCenter zkRegCenter;
-
+    
     @BeforeAll
-    public static void setUp() {
+    static void setUp() {
         EmbedTestingServer.start();
         zkRegCenter = new ZookeeperRegistryCenter(ZOOKEEPER_CONFIGURATION);
         ZOOKEEPER_CONFIGURATION.setConnectionTimeoutMilliseconds(30000);
         zkRegCenter.init();
         ZookeeperRegistryCenterTestUtil.persist(zkRegCenter);
     }
-
+    
     @AfterAll
-    public static void tearDown() {
+    static void tearDown() {
         zkRegCenter.close();
     }
-
+    
     @Test
     @Timeout(value = 10000L, unit = TimeUnit.MILLISECONDS)
-    public void assertWatchWithoutExecutor() throws InterruptedException {
+    void assertWatchWithoutExecutor() throws InterruptedException {
         CountDownLatch waitingForCountDownValue = new CountDownLatch(1);
         String key = "/test-watch-without-executor";
         zkRegCenter.addCacheData(key);
@@ -73,10 +73,10 @@ public final class ZookeeperRegistryCenterWatchTest {
         zkRegCenter.update(key, "countDown");
         waitingForCountDownValue.await();
     }
-
+    
     @Test
     @Timeout(value = 10000L, unit = TimeUnit.MILLISECONDS)
-    public void assertWatchWithExecutor() throws InterruptedException {
+    void assertWatchWithExecutor() throws InterruptedException {
         CountDownLatch waitingForCountDownValue = new CountDownLatch(1);
         String key = "/test-watch-with-executor";
         zkRegCenter.addCacheData(key);

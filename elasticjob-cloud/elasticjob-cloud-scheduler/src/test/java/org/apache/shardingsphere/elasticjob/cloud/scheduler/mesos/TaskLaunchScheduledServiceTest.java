@@ -59,7 +59,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public final class TaskLaunchScheduledServiceTest {
+class TaskLaunchScheduledServiceTest {
     
     @Mock
     private SchedulerDriver schedulerDriver;
@@ -76,19 +76,19 @@ public final class TaskLaunchScheduledServiceTest {
     private TaskLaunchScheduledService taskLaunchScheduledService;
     
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         lenient().when(facadeService.loadAppConfig("test_app")).thenReturn(Optional.of(CloudAppConfigurationBuilder.createCloudAppConfiguration("test_app")));
         taskLaunchScheduledService = new TaskLaunchScheduledService(schedulerDriver, taskScheduler, facadeService, jobTracingEventBus);
         taskLaunchScheduledService.startUp();
     }
     
     @AfterEach
-    public void tearDown() {
+    void tearDown() {
         taskLaunchScheduledService.shutDown();
     }
     
     @Test
-    public void assertRunOneIteration() {
+    void assertRunOneIteration() {
         when(facadeService.getEligibleJobContext()).thenReturn(
                 Collections.singletonList(JobContext.from(CloudJobConfigurationBuilder.createCloudJobConfiguration("failover_job", CloudJobExecutionType.DAEMON, 1), ExecutionType.FAILOVER)));
         Map<String, VMAssignmentResult> vmAssignmentResultMap = new HashMap<>();
@@ -105,7 +105,7 @@ public final class TaskLaunchScheduledServiceTest {
     }
     
     @Test
-    public void assertRunOneIterationWithScriptJob() {
+    void assertRunOneIterationWithScriptJob() {
         when(facadeService.getEligibleJobContext()).thenReturn(
                 Collections.singletonList(JobContext.from(CloudJobConfigurationBuilder.createScriptCloudJobConfiguration("script_job", 1).toCloudJobConfiguration(), ExecutionType.READY)));
         Map<String, VMAssignmentResult> vmAssignmentResultMap = new HashMap<>();
@@ -125,16 +125,16 @@ public final class TaskLaunchScheduledServiceTest {
     private TaskAssignmentResult mockTaskAssignmentResult(final String taskName, final ExecutionType executionType) {
         TaskAssignmentResult result = mock(TaskAssignmentResult.class);
         when(result.getTaskId()).thenReturn(String.format("%s@-@0@-@%s@-@unassigned-slave@-@0", taskName, executionType.name()));
-        return result; 
+        return result;
     }
     
     @Test
-    public void assertScheduler() {
+    void assertScheduler() {
         assertThat(taskLaunchScheduledService.scheduler(), instanceOf(Scheduler.class));
     }
     
     @Test
-    public void assertServiceName() {
+    void assertServiceName() {
         assertThat(taskLaunchScheduledService.serviceName(), is("task-launch-processor"));
     }
 }

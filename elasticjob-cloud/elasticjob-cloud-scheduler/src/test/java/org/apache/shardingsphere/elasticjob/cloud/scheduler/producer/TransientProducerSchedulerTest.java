@@ -39,14 +39,14 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public final class TransientProducerSchedulerTest {
+class TransientProducerSchedulerTest {
     
     @Mock
     private ReadyService readyService;
     
     @Mock
     private Scheduler scheduler;
-
+    
     private TransientProducerScheduler transientProducerScheduler;
     
     private final CloudJobConfigurationPOJO cloudJobConfig = CloudJobConfigurationBuilder.createCloudJobConfiguration("test_job");
@@ -54,17 +54,18 @@ public final class TransientProducerSchedulerTest {
     private final JobDetail jobDetail = JobBuilder.newJob(TransientProducerScheduler.ProducerJob.class).withIdentity(cloudJobConfig.getCron()).build();
     
     private final Trigger trigger = TriggerBuilder.newTrigger().withIdentity(cloudJobConfig.getCron())
-                        .withSchedule(CronScheduleBuilder.cronSchedule(cloudJobConfig.getCron())
-                        .withMisfireHandlingInstructionDoNothing()).build();
+            .withSchedule(CronScheduleBuilder.cronSchedule(cloudJobConfig.getCron())
+                    .withMisfireHandlingInstructionDoNothing())
+            .build();
     
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         transientProducerScheduler = new TransientProducerScheduler(readyService);
         ReflectionUtils.setFieldValue(transientProducerScheduler, "scheduler", scheduler);
     }
     
     @Test
-    public void assertRegister() throws SchedulerException {
+    void assertRegister() throws SchedulerException {
         when(scheduler.checkExists(jobDetail.getKey())).thenReturn(false);
         transientProducerScheduler.register(cloudJobConfig);
         verify(scheduler).checkExists(jobDetail.getKey());
@@ -72,13 +73,13 @@ public final class TransientProducerSchedulerTest {
     }
     
     @Test
-    public void assertDeregister() throws SchedulerException {
+    void assertDeregister() throws SchedulerException {
         transientProducerScheduler.deregister(cloudJobConfig);
         verify(scheduler).unscheduleJob(TriggerKey.triggerKey(cloudJobConfig.getCron()));
     }
     
     @Test
-    public void assertShutdown() throws SchedulerException {
+    void assertShutdown() throws SchedulerException {
         transientProducerScheduler.shutdown();
         verify(scheduler).isShutdown();
         verify(scheduler).shutdown();

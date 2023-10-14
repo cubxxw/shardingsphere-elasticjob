@@ -7,7 +7,7 @@
  * the License.  You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *  
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -29,12 +29,12 @@ import java.util.Map;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-public final class OdevitySortByNameJobShardingStrategyTest {
+class OdevitySortByNameJobShardingStrategyTest {
     
     private final OdevitySortByNameJobShardingStrategy odevitySortByNameJobShardingStrategy = new OdevitySortByNameJobShardingStrategy();
     
     @Test
-    public void assertShardingByAsc() {
+    void assertShardingByAsc() {
         Map<JobInstance, List<Integer>> expected = new HashMap<>();
         expected.put(new JobInstance("host0@-@0"), Collections.singletonList(0));
         expected.put(new JobInstance("host1@-@0"), Collections.singletonList(1));
@@ -43,7 +43,7 @@ public final class OdevitySortByNameJobShardingStrategyTest {
     }
     
     @Test
-    public void assertShardingByDesc() {
+    void assertShardingByDesc() {
         Map<JobInstance, List<Integer>> expected = new HashMap<>();
         expected.put(new JobInstance("host2@-@0"), Collections.singletonList(0));
         expected.put(new JobInstance("host1@-@0"), Collections.singletonList(1));

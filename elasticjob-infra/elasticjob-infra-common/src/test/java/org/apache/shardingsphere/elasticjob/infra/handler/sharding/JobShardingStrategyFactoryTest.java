@@ -7,7 +7,7 @@
  * the License.  You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *  
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -26,21 +26,20 @@ import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public final class JobShardingStrategyFactoryTest {
+class JobShardingStrategyFactoryTest {
     
     @Test
-    public void assertGetDefaultStrategy() {
+    void assertGetDefaultStrategy() {
         assertThat(JobShardingStrategyFactory.getStrategy(null), instanceOf(AverageAllocationJobShardingStrategy.class));
     }
     
     @Test
-    public void assertGetInvalidStrategy() {
-        assertThrows(JobConfigurationException.class, () ->
-                JobShardingStrategyFactory.getStrategy("INVALID"));
+    void assertGetInvalidStrategy() {
+        assertThrows(JobConfigurationException.class, () -> JobShardingStrategyFactory.getStrategy("INVALID"));
     }
     
     @Test
-    public void assertGetStrategy() {
+    void assertGetStrategy() {
         assertThat(JobShardingStrategyFactory.getStrategy("ODEVITY"), instanceOf(OdevitySortByNameJobShardingStrategy.class));
     }
 }

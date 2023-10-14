@@ -43,7 +43,7 @@ public abstract class AbstractOneOffJobSpringIntegrateTest extends AbstractZooke
     private final String simpleJobName;
     
     private final String throughputDataflowJobName;
-
+    
     @Autowired
     private ApplicationContext applicationContext;
     
@@ -52,19 +52,19 @@ public abstract class AbstractOneOffJobSpringIntegrateTest extends AbstractZooke
     
     @BeforeEach
     @AfterEach
-    public void reset() {
+    void reset() {
         FooSimpleElasticJob.reset();
         DataflowElasticJob.reset();
     }
     
     @AfterEach
-    public void tearDown() {
+    void tearDown() {
         JobRegistry.getInstance().shutdown(simpleJobName);
         JobRegistry.getInstance().shutdown(throughputDataflowJobName);
     }
     
     @Test
-    public void assertSpringJobBean() {
+    void assertSpringJobBean() {
         assertSimpleElasticJobBean();
         assertThroughputDataflowElasticJobBean();
     }
@@ -72,9 +72,7 @@ public abstract class AbstractOneOffJobSpringIntegrateTest extends AbstractZooke
     private void assertSimpleElasticJobBean() {
         OneOffJobBootstrap bootstrap = applicationContext.getBean(simpleJobName, OneOffJobBootstrap.class);
         bootstrap.execute();
-        Awaitility.await().atMost(5L, TimeUnit.MINUTES).untilAsserted(() ->
-                assertThat(FooSimpleElasticJob.isCompleted(), is(true))
-        );
+        Awaitility.await().atMost(5L, TimeUnit.MINUTES).untilAsserted(() -> assertThat(FooSimpleElasticJob.isCompleted(), is(true)));
         assertTrue(FooSimpleElasticJob.isCompleted());
         assertTrue(regCenter.isExisted("/" + simpleJobName + "/sharding"));
     }
@@ -82,9 +80,7 @@ public abstract class AbstractOneOffJobSpringIntegrateTest extends AbstractZooke
     private void assertThroughputDataflowElasticJobBean() {
         OneOffJobBootstrap bootstrap = applicationContext.getBean(throughputDataflowJobName, OneOffJobBootstrap.class);
         bootstrap.execute();
-        Awaitility.await().atMost(5L, TimeUnit.MINUTES).untilAsserted(() ->
-                assertThat(DataflowElasticJob.isCompleted(), is(true))
-        );
+        Awaitility.await().atMost(5L, TimeUnit.MINUTES).untilAsserted(() -> assertThat(DataflowElasticJob.isCompleted(), is(true)));
         assertTrue(DataflowElasticJob.isCompleted());
         assertTrue(regCenter.isExisted("/" + throughputDataflowJobName + "/sharding"));
     }

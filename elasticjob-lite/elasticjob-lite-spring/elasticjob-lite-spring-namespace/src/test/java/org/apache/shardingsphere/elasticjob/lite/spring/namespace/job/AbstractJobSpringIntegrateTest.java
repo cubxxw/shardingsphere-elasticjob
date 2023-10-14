@@ -47,35 +47,31 @@ public abstract class AbstractJobSpringIntegrateTest extends AbstractZookeeperJU
     
     @BeforeEach
     @AfterEach
-    public void reset() {
+    void reset() {
         FooSimpleElasticJob.reset();
         DataflowElasticJob.reset();
     }
     
     @AfterEach
-    public void tearDown() {
+    void tearDown() {
         JobRegistry.getInstance().shutdown(simpleJobName);
         JobRegistry.getInstance().shutdown(throughputDataflowJobName);
     }
     
     @Test
-    public void assertSpringJobBean() {
+    void assertSpringJobBean() {
         assertSimpleElasticJobBean();
         assertThroughputDataflowElasticJobBean();
     }
     
     private void assertSimpleElasticJobBean() {
-        Awaitility.await().atMost(1L, TimeUnit.MINUTES).untilAsserted(() ->
-                assertThat(FooSimpleElasticJob.isCompleted(), is(true))
-        );
+        Awaitility.await().atMost(1L, TimeUnit.MINUTES).untilAsserted(() -> assertThat(FooSimpleElasticJob.isCompleted(), is(true)));
         assertTrue(FooSimpleElasticJob.isCompleted());
         assertTrue(regCenter.isExisted("/" + simpleJobName + "/sharding"));
     }
     
     private void assertThroughputDataflowElasticJobBean() {
-        Awaitility.await().atMost(1L, TimeUnit.MINUTES).untilAsserted(() ->
-                assertThat(DataflowElasticJob.isCompleted(), is(true))
-        );
+        Awaitility.await().atMost(1L, TimeUnit.MINUTES).untilAsserted(() -> assertThat(DataflowElasticJob.isCompleted(), is(true)));
         assertTrue(DataflowElasticJob.isCompleted());
         assertTrue(regCenter.isExisted("/" + throughputDataflowJobName + "/sharding"));
     }

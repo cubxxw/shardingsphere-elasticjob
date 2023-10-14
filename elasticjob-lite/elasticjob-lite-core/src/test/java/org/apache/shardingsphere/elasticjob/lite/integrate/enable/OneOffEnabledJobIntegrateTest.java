@@ -7,7 +7,7 @@
  * the License.  You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *  
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -28,9 +28,9 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public final class OneOffEnabledJobIntegrateTest extends EnabledJobIntegrateTest {
+class OneOffEnabledJobIntegrateTest extends EnabledJobIntegrateTest {
     
-    public OneOffEnabledJobIntegrateTest() {
+    OneOffEnabledJobIntegrateTest() {
         super(TestType.ONE_OFF, new DetailedFooJob());
     }
     
@@ -41,10 +41,8 @@ public final class OneOffEnabledJobIntegrateTest extends EnabledJobIntegrateTest
     }
     
     @Test
-    public void assertJobInit() {
-        Awaitility.await().atMost(1L, TimeUnit.MINUTES).untilAsserted(() ->
-                assertThat(((DetailedFooJob) getElasticJob()).isCompleted(), is(true))
-        );
+    void assertJobInit() {
+        Awaitility.await().atMost(1L, TimeUnit.MINUTES).untilAsserted(() -> assertThat(((DetailedFooJob) getElasticJob()).isCompleted(), is(true)));
         assertTrue(getREGISTRY_CENTER().isExisted("/" + getJobName() + "/sharding"));
     }
 }
